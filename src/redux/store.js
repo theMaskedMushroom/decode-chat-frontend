@@ -11,7 +11,7 @@ function reducer(state, action)
             // Need to evaluate if the user successfully logged in
             if (action.payload.success)
             {
-                return {...state, sessionId:action.payload.sessionId, loggedIn:true}
+                return {...state, loggedIn:true}
             }
             else
             {

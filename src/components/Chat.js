@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import io from 'socket.io-client';
 import '../App.css';
+import Messages from './Messages';
 
 class Chat extends Component
 {
@@ -11,7 +12,8 @@ class Chat extends Component
 
         this.state = {
             message:'',
-            users:[]
+            users:[],
+            messages: []
         }
 
         // This doesn't belong in the state, it's our socket
@@ -22,6 +24,7 @@ class Chat extends Component
         this.onSubmitMsg = this.onSubmitMsg.bind(this);
         this.onUserJoin = this.onUserJoin.bind(this);
         this.onUserLeft = this.onUserLeft.bind(this);
+        this.onMessage = this.onMessage.bind(this);
     }
 
     onMessageChange(evt)
@@ -54,17 +57,20 @@ class Chat extends Component
 
     onUserJoin(data)
     {
-        alert('user added: ' + data.serverMsg + "\nUsers" + data.users)
+        //alert('user added: ' + data.serverMsg + "\nUsers" + data.users)
+        this.setState({messages: this.state.messages.concat({msg:data.msg, type:'server'})});
     }
 
     onUserLeft(data)
     {
-        alert('user left: ' + data.serverMsg + "\nUsers" + data.users)
+        //alert('user left: ' + data.serverMsg + "\nUsers" + data.users)
+        this.setState({messages: this.state.messages.concat({msg:data.msg, type:'server'})});
     }
 
     onMessage(data)
     {
-        alert('message => ' + data.msg);
+        //alert('message => ' + data.msg);
+        this.setState({messages: this.state.messages.concat({msg:data.msg, type:'user'})});
     }
 
     render()
@@ -72,8 +78,7 @@ class Chat extends Component
         return (
         <div>
             <div className="topcontainer">
-                <div> jack: hello </div>
-                <div> bob: hey </div>
+                    <Messages messages={this.state.messages}/>
             </div>
             <div className="botcontainer">
                 <form onSubmit={this.onSubmitMsg}>
